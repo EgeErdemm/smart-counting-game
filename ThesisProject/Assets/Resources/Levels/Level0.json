@@ -1,0 +1,20 @@
+﻿{
+    "level": 0,
+    "optimalPath": 7,
+    "targetScore": 30,
+    "startX": -1,
+    "startY": 0,
+    "gridWidth": 5,
+    "gridHeight": 4,
+    "grid": [
+         3, 5, 3, 9, 2,
+         5, 2, 7, 4, 3,
+         7, 2, 2, 4, 9,
+         1, 5, 7, 1, 1
+    ],
+
+    "comment": "11-6-13-8-14-9-3-8",
+    "isBlind": false,
+    "totalTime": 60 
+
+}
