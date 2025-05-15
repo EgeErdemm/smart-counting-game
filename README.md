@@ -101,11 +101,11 @@ _eventBus.Subscribe<TimeUpEvent>(OnTimeUp);
 ## 🖼️ Oyun Görselleri
 
 ### 🧩 Ana Oyun Ekranı  
-![Ana Oyun Ekranı](screenshots/game1.png "Oyuncu rastgele sayılarla dolu grid üzerinde toplama/çıkarma işlemleriyle ilerliyor.")
+![Ana Oyun Ekranı](./screenshots/game1.png "Oyuncu rastgele sayılarla dolu grid üzerinde toplama/çıkarma işlemleriyle ilerliyor.")
 
 ### 💣 Bomba Modu  
-![Bomba Modu](screenshots/bombmode.png "Bomba modunda yanlış hücreye gitmek, zaman kaybına ve oyunun kaybedilmesine yol açar.")
+![Bomba Modu](./screenshots/bombmode.png "Bomba modunda yanlış hücreye gitmek, zaman kaybına ve oyunun kaybedilmesine yol açar.")
 
 ### 🧪 Blind Mod Özelliği  
-![Blind Mod](screenshots/blindmode.png "Her adımda sadece 1’er birim sol, sağ, yukarı ve aşağı hücreler görünür.")
+![Blind Mod](./screenshots/blindmode.png "Her adımda sadece 1’er birim sol, sağ, yukarı ve aşağı hücreler görünür.")
 
