@@ -139,7 +139,8 @@ public class LevelLoader : MonoBehaviour
         levelData.startX = 0;
         levelData.startY = 0;
         levelData.totalTime = 60;
-        levelData.isBlind = false;
+        levelData.isBlind = Random.Range(0, 2) == 0;
+        //%50 change to blind mode
         int tileCount = levelData.gridHeight * levelData.gridWidth;
         levelData.grid = new int[tileCount];
         for (int i = 0; i < tileCount; i++)
