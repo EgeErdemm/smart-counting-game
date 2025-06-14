@@ -1,34 +1,39 @@
-# 🎓 Tez Projesi: Toplama ve Çıkarma Mekanikli Eğitici Mobil Oyun
+#  GAME-BASED MATHEMATICS EDUCATION WITH 2D AND 3D UNITY PROJECT
 
-Bu tez projesi kapsamında, çocukların temel aritmetik becerilerini ve problem çözme yeteneklerini geliştirmeye yönelik bir mobil eğitim oyunu geliştirilmiştir. Oyun, süre sınırlı bir oynanış içerisinde hedef skora ulaşmayı amaçlayan bir puzzle mekaniğine sahiptir.
 
-Oyuncu, rastgele oluşturulan sayılarla dolu bir grid üzerinde yön tuşları ya da kaydırma hareketleriyle gezinerek ilerler. Her adımda ulaşılan hücredeki sayılar, toplama veya çıkarma moduna göre oyuncunun skoruna eklenir ya da çıkarılır. Oyunun temel amacı, verilen süre içinde en uygun rotayı takip ederek hedef skora ulaşmaktır.
+As part of this thesis project, a mobile educational game has been developed to enhance children's basic arithmetic skills and problem-solving abilities. The game features a puzzle mechanic where the goal is to reach a target score within a time limit.
 
-Bu yapı, sadece temel işlem pratiği sunmakla kalmayıp aynı zamanda stratejik planlama ve dikkat gibi bilişsel becerileri de desteklemeyi hedeflemektedir.
+The player navigates a grid filled with randomly generated numbers using directional buttons or swipe gestures. At each step, the number in the current cell is either added to or subtracted from the player's score, depending on whether addition or subtraction mode is selected. The main objective is to reach the target score by following the optimal path within the given time.
 
-## 🎮 Oyun Mekanikleri
+This structure not only provides basic arithmetic practice but also aims to support cognitive skills such as strategic planning and attention.
 
-- Oyun sahası rastgele oluşturulan sayılarla dolu bir grid sistemine sahiptir.
-- Oyuncu, dört yöne kaydırma (swipe) hareketiyle grid üzerinde gezinir.
-- Gezinilen hücredeki sayılar, oyuncunun skoruna eklenir.
-- Oyuncu, ekran üzerindeki UI aracılığıyla toplama veya çıkarma modunu seçebilir.
-- Amaç, verilen adım sayısı içinde hedef skora ulaşmaktır.
-- Zaman dolmadan doğru rotayı izleyerek hedef skora ulaşan oyuncu kazanır.
+## 🎮 Game Mechanics
 
-## 🧠 Yazılım Mimarisi
+-The game board consists of a grid filled with randomly generated numbers.
+-The player navigates the grid by swiping in four directions.
+-The numbers in the cells visited by the player are added to their score.
+-The player can select either addition or subtraction mode via the UI on the screen.
+-The goal is to reach the target score within a limited number of moves.
+-The player wins by following the correct path and reaching the target score before time runs out.
 
-Proje, **OOP** prensiplerine ve **SOLID yazılım geliştirme ilkelerine** uygun olarak inşa edilmiştir. Kod yapısı modüler ve genişletilebilir olacak şekilde tasarlanmıştır.
+### 🎥 Game Play
+[![Game Play](https://img.youtube.com/vi/r17iroOqR-g/0.jpg)](https://www.youtube.com/watch?v=r17iroOqR-g)
 
-### 🔧 Kullanılan SOLID Prensipleri
 
-- **Single Responsibility**: Her sınıf sadece tek bir sorumluluğa sahiptir. (Örn: `ScoreManager`, sadece skor takibini yapar.)
-- **Open/Closed**: Kod açık ama değişikliğe kapalı olacak şekilde genişletilebilir olarak yazılmıştır. (Örn: farklı zaman yöneticileri eklemek için `AbstractTimerManager` türetilebilir.)
-- **Interface Segregation & Dependency Inversion**: `IGameWinCheck`, `INextLevelLoader`, `ISeaAbleArea` gibi arayüzlerle davranışlar soyutlanmıştır. `GameManager` bu soyutlamalar üzerinden çalışır.
+## Software Architecture
 
-### 🧩 Event Sistemi ve EventBus
+The project is built in accordance with **OOP** principles and the **SOLID** software development principles. The codebase is designed to be modular and easily extendable.
 
-Projede **event tabanlı mimari** kullanılmıştır. `GameManager` sınıfı, oyun olaylarını merkezi bir kanal olan `IEventBus` üzerinden dinlemektedir:
+### SOLID Principles
 
+**Single Responsibility**: Each class has only one responsibility. (e.g., `ScoreManager is solely responsible for score tracking.)
+**Open/Closed**: The code is open for extension but closed for modification. (e.g., different timer managers can be implemented by deriving from `AbstractTimerManager`.)
+**Interface Segregation & Dependency Inversion**: Behaviors are abstracted using interfaces such as `IGameWinCheck`, `INextLevelLoader`, and ISeaAbleArea. The `GameManager` operates based on these abstractions.
+
+
+### 🧩 Event System and EventBus
+
+An **event-driven architecture** is used in the project. The `GameManager` class listens to game events through a central channel called `IEventBus`:
 ```csharp
 _eventBus.Subscribe<TimeUpEvent>(OnTimeUp);
 
@@ -98,14 +103,40 @@ _eventBus.Subscribe<TimeUpEvent>(OnTimeUp);
 ```
 
 
-## 🖼️ Oyun Görselleri
+## 🖼️ Game Images
 
-### 🧩 Ana Oyun Ekranı  
-![Ana Oyun Ekranı](./screenshots/game1.png "Oyuncu rastgele sayılarla dolu grid üzerinde toplama/çıkarma işlemleriyle ilerliyor.")
+###  Main Game Screen  
+![Main](./screenshots/game1.png "Oyuncu rastgele sayılarla dolu grid üzerinde toplama/çıkarma işlemleriyle ilerliyor.")
 
 ### 💣 Bomba Modu  
-![Bomba Modu](./screenshots/bombmode.png "Bomba modunda yanlış hücreye gitmek, zaman kaybına ve oyunun kaybedilmesine yol açar.")
+![Bomb Mod](./screenshots/bombmode.png "Bomba modunda yanlış hücreye gitmek, zaman kaybına ve oyunun kaybedilmesine yol açar.")
 
 ### 🧪 Blind Mod Özelliği  
 ![Blind Mod](./screenshots/blindmode.png "Her adımda sadece 1’er birim sol, sağ, yukarı ve aşağı hücreler görünür.")
+
+##  Installation & Running
+
+### Prerequisites
+
+-Unity 2022 or later installed
+
+### Steps
+
+1. **Clone the repository:**
+    ```bash
+   git clone https://github.com/EgeErdemm/smart-counting-game.git
+    ``
+2. Open the project in **Unity Hub**:
+3. Open the FirstScene
+4. Press the Play button to start the game.
+
+> **Note:**  
+> The following asset folders and their contents are not included in this repository due to their standard Unity Asset Store license restrictions:
+> - `Assets/Layer Lab/`
+> - `Assets/Layer Lab.meta`
+> - `Assets/Kamgam/`
+> - `Assets/POLYGONCityCharacters/`
+>
+> As a result, some visual elements may be missing or incomplete when you run the project for the first time.  
+> Please make sure to import these packages manually from the Unity Asset Store if you wish to use the full visual content.
 
