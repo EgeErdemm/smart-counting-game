@@ -26,9 +26,9 @@ The project is built in accordance with **OOP** principles and the **SOLID** sof
 
 ### SOLID Principles
 
-**Single Responsibility**: Each class has only one responsibility. (e.g., `ScoreManager is solely responsible for score tracking.)
+**Single Responsibility**: Each class has only one responsibility. (e.g., `ScoreManager` is solely responsible for score tracking.)
 **Open/Closed**: The code is open for extension but closed for modification. (e.g., different timer managers can be implemented by deriving from `AbstractTimerManager`.)
-**Interface Segregation & Dependency Inversion**: Behaviors are abstracted using interfaces such as `IGameWinCheck`, `INextLevelLoader`, and ISeaAbleArea. The `GameManager` operates based on these abstractions.
+**Interface Segregation & Dependency Inversion**: Behaviors are abstracted using interfaces such as `IGameWinCheck`, `INextLevelLoader`, and `ISeaAbleArea`. The `GameManager` operates based on these abstractions.
 
 
 ### 🧩 Event System and EventBus
