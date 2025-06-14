@@ -33,6 +33,7 @@ public class AddSubUI : MonoBehaviour
 
         AddButton.colors = AddBlock;
         SubButton.colors = SubBlock;
+        Debug.Log("add mode");
     }
 
     public void SubMode()
@@ -44,5 +45,7 @@ public class AddSubUI : MonoBehaviour
 
         AddButton.colors = AddBlock;
         SubButton.colors = SubBlock;
+        Debug.Log("sub mode");
+
     }
 }

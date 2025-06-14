@@ -4,36 +4,53 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public abstract class BaseLevelLoader : MonoBehaviour
+public abstract class BaseLevelLoader : MonoBehaviour ,ITileGridProvider , ILevelDataProvider
 {
     public GameObject[,] tileGrid;
     public LevelData levelData;
 
-    private int gridWidth;
-    private int gridHeight;
+    [HideInInspector] public GameObject player;
+
+    protected int gridWidth;
+    protected int gridHeight;
 
     protected abstract GameObject BombTile { get; }
     protected abstract GameObject TilePrefab { get; }
-    protected abstract Transform GridParent { get; }
+    public abstract Transform GridParent { get; }
     protected abstract float CellSize { get; }
-    protected abstract RectTransform gridParentRectTransform { get; }//
+    public abstract RectTransform gridParentRectTransform { get; }//
+
+    protected IEventBus _eventbus;
+    LevelData ILevelDataProvider.levelData => levelData;
+    protected TileEater _tileEater;
+
+
     protected abstract void SetTilePosition(GameObject tile, int x, int y);
 
+    public GameObject GetTile(int x, int y)
+    {
+        return tileGrid[y, x]; // dikkat: [y, x]
+    }
 
+    protected virtual void OnEnable()
+    {
+        _eventbus = EventBus.Instance;
+        _tileEater = new TileEater(this,this); // tile and leveldata provider send
+    }
+
+    protected void PublishTargetScore()
+    {
+        _eventbus.Publish(new TargetScoreEvent(levelData.targetScore));// listeners ui manager
+        _eventbus.Publish(new RequestStartTimerEvent());
+    }
 
     protected virtual void LoadLevel()
     {
-
-        if (levelData.grid == null || levelData.gridHeight == null)
-        {
-            Debug.Log("level data eror");
-        }
 
         gridWidth = levelData.gridWidth;
         gridHeight = levelData.gridHeight;
 
         tileGrid = new GameObject[levelData.gridHeight, levelData.gridWidth];
-
 
         for (int y = 0; y < gridHeight; y++)
         {
@@ -43,10 +60,8 @@ public abstract class BaseLevelLoader : MonoBehaviour
                 int value = levelData.grid[index];
 
 
-                //GameObject tile = Instantiate(TilePrefab, GridParent);
                 GameObject tile = Instantiate(TilePrefab); 
                 tile.transform.SetParent(GridParent, false);
-                //tile.GetComponent<RectTransform>().anchoredPosition = new Vector2(x * CellSize, -y * CellSize);
                 SetTilePosition(tile, x, y);
                 ITextProvider textProvider = new TextProvider(tile);
                 textProvider.SetText(value.ToString());
@@ -71,54 +86,37 @@ public abstract class BaseLevelLoader : MonoBehaviour
     }
 
 
-
-
-
-    private void isBlack(GameObject tile)
+    protected virtual void isBlack(GameObject tile)
     {
         tile.GetComponent<Image>().color = Color.black;
     }
 
 
-    private void Start()
+    protected void Start()
     {
-
         LevelStarter();
-
     }
-
 
     public void LevelStarter()
     {
         MakeLevelData();
-
         LoadLevel();
         Invoke(nameof(SceneOrder),0.2f);
-
     }
 
     protected virtual void SceneOrder()
     {
-        //gridParentRectTransform.anchoredPosition = new Vector3(-(gridWidth - 1) * CellSize * 0.5f, (gridHeight - 1) * CellSize * 0.5f, 0f);
-
-        ////player = Instantiate(PlayerTilePrefab, gridParent);
-        //int PlayerX = levelData.startX;
-        //float startPosX = PlayerX * cellSize;
-        //int PlayerY = levelData.startY;
-        //float startPosY = PlayerY * cellSize;
-        //player.GetComponent<RectTransform>().anchoredPosition = new Vector2(startPosX, startPosY);
-
+        Invoke(nameof(PublishTargetScore), 0.1f);
     }
 
 
-    private void MakeLevelData()
+    protected virtual void MakeLevelData()
     {
-        Debug.Log("Make data started");
         levelData = new LevelData();
         levelData.targetScore = Random.Range(45, 100);
-        levelData.gridWidth = Random.Range(4, 10);
-        levelData.gridHeight = Random.Range(4, 10);
-        levelData.startX = 0;
+        levelData.gridWidth = 6;//Random.Range(4, 10);
+        levelData.gridHeight = 6;//Random.Range(4, 10);
+        levelData.startX = -1;
         levelData.startY = 0;
         levelData.totalTime = 60;
         levelData.isBlind = Random.Range(0, 2) == 0;
@@ -129,7 +127,6 @@ public abstract class BaseLevelLoader : MonoBehaviour
         {
             levelData.grid[i] = Random.Range(1, 15);
         }
-        Debug.Log("Make data Finished");
 
     }
 

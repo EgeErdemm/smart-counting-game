@@ -10,7 +10,7 @@ public class LevelData
     public int gridWidth;
     public int gridHeight;
 
-    public string comment; // Yorum için ekledik
+    public string comment; 
     public bool isBlind;
     public int totalTime;
 }

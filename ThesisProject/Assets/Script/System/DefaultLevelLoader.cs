@@ -31,7 +31,16 @@ public class DefaultLevelLoader : BaseEventBusAbstract, INextLevelLoader
         if (levelLoader.player != null)
             GameObject.Destroy(levelLoader.player);
 
-        foreach (Transform child in levelLoader.gridParent)
+        if(levelLoader.gridParentRectTransform != null)
+        {
+            foreach (Transform child in levelLoader.gridParentRectTransform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+  
+        foreach (Transform child in levelLoader.GridParent)
         {
             GameObject.Destroy(child.gameObject);
         }

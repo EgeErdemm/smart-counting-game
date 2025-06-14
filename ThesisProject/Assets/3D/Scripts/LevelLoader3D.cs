@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class LevelLoader3D : BaseLevelLoader
 {
-    private IEventBus _eventbus;
 
     [SerializeField] private GameObject bombTile;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform gridParent;
     [SerializeField] private float cellSize;
+    [SerializeField] private GameObject playerObject;
+    private IPlayerCreate3D _playerCreator;
+    private ScoreManagerChild scoreManager;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        _eventbus = EventBus.Instance;
+        base.OnEnable();
+        _playerCreator = new PlayerCreate3D(playerObject, this);
+        scoreManager = new ScoreManagerChild(this);
     }
 
 
@@ -21,11 +25,11 @@ public class LevelLoader3D : BaseLevelLoader
 
     protected override GameObject TilePrefab => tilePrefab;
 
-    protected override Transform GridParent => gridParent;
+    public override Transform GridParent => gridParent;
 
     protected override float CellSize => cellSize;
 
-    protected override RectTransform gridParentRectTransform => throw new System.NotImplementedException(); // this is for 2d class. ovveride it
+    public override RectTransform gridParentRectTransform => null; // this is for 2d class. ovveride it
 
     protected override void SetTilePosition(GameObject tile, int x, int y)
     {
@@ -35,8 +39,15 @@ public class LevelLoader3D : BaseLevelLoader
     protected override void SceneOrder()
     {
         base.SceneOrder();
-        _eventbus.Publish(new GridSizeEvent(levelData.gridWidth, levelData.gridHeight));
+        _eventbus.Publish(new GridSizeEvent(levelData.gridWidth, levelData.gridHeight)); // cam listening
         Debug.Log("event publish");
+        startPlayer();
+    }
+
+
+    private void startPlayer()
+    {
+       player= _playerCreator.CreatePlayer(); // player object 
     }
 
 }

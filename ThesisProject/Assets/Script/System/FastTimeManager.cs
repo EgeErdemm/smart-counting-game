@@ -4,7 +4,25 @@ using UnityEngine;
 
 public class FastTimeManager : AbstractTimerManager
 {
- 
+    [SerializeField] private BaseLevelLoader baseLevelLoader;
+
+    protected override void Start()
+    {
+        if (levelLoader == null || levelLoader.levelData == null)
+        {
+            levelLoader = baseLevelLoader;
+        }
+        Invoke(nameof(LateAssignLevelLoader), 0.05f);
+    }
+
+    private void LateAssignLevelLoader()
+    {
+        if (levelLoader == null || levelLoader.levelData == null)
+        {
+            levelLoader.levelData = baseLevelLoader.levelData;
+        }
+        else { Debug.Log("LEVEL LOADER NOT NULL"); }
+    }
 
     protected override IEnumerator CountdownRoutine(int totalTime)
     {

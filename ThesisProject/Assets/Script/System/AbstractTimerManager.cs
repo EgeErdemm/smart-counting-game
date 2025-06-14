@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AbstractTimerManager : MonoBehaviour
 {
-    protected LevelLoader levelLoader;
+    protected BaseLevelLoader levelLoader;
     protected IEventBus _eventBus;
 
 
@@ -14,7 +14,6 @@ public abstract class AbstractTimerManager : MonoBehaviour
     }
 
     protected Coroutine countdownCoroutine;
-
 
     protected virtual void OnEnable()
     {

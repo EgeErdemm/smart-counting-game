@@ -9,16 +9,12 @@ using DG.Tweening;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
-
     [SerializeField] private TextMeshProUGUI TargetScoreTxt;
-
     [SerializeField] private TimerManager timerManager;
-
     [SerializeField] private GameObject WinPanel, LosePanel;
-
-
+    [SerializeField] private TextMeshProUGUI ScoreTxt;
     private LevelLoader levelLoader;
-
+    private IEventBus _eventbus;
 
     private void Start()
     {
@@ -27,11 +23,10 @@ public class UIManager : MonoBehaviour
     }
 
 
-
     private void OnEnable()
     {
+        _eventbus = EventBus.Instance;
         TimerEvents.OnTick += UpdateTimerText;
-       // TimerEvents.OnTimeUp += ShowLosePanel;
         PlayerMoveEvent.OnPlayerMove += RefreshEatenTile;
         PlayerMoveEvent.OnPlayerMove += (x) => TargetsTextUpdate();
         GameEvent.OnLose += ShowLosePanel;
@@ -41,8 +36,27 @@ public class UIManager : MonoBehaviour
 
         GameEvent.OnNextGame += TargetsTextUpdate;
         GameEvent.OnReGame += TargetsTextUpdate;
+        _eventbus.Subscribe<TargetScoreEvent>(OnTargetScore);
+        _eventbus.Subscribe<TickEvent>(OnTickEvent);
+        ScoreEvent.OnPlayerScoreChanged += OnScoreChanged;
     }
 
+    private void OnScoreChanged(int newScore)
+    {
+        ScoreTxt.text = "Score: " + newScore;
+    }
+
+    private void OnTickEvent(TickEvent obj)
+    {
+        UpdateTimerText(obj.SecondsLeft);
+    }
+
+    private void OnTargetScore(TargetScoreEvent obj)
+    {
+        int targetScore = obj.TargetScore;
+        TargetScoreTxt.text = "Target Score: " + targetScore;
+        Debug.Log("TargetScore");
+    }
 
     private void OnDisable()
     {
@@ -64,23 +78,19 @@ public class UIManager : MonoBehaviour
         LosePanel.transform.DOScale(new Vector3(1, 1, 1), 1f);
     }
 
-
     private void ShowWinPanel()
     {
         WinPanel.transform.DOScale(new Vector3(1, 1, 1), 1f);
-
     }
 
     private void CloseWinPanel()
     {
         WinPanel.transform.DOScale(new Vector3(0f, 0f, 0f), 1f);
-
     }
 
     private void CloseLosePanel()
     {
         LosePanel.transform.DOScale(new Vector3(0f, 0f, 0f), 1f);
-
     }
 
     private void RefreshEatenTile(int index)
@@ -100,15 +110,11 @@ public class UIManager : MonoBehaviour
         text.text = "0";
     }
 
-
-
     private void TargetsTextUpdate()
     {
         int targetScore = levelLoader.levelData.targetScore;
-
         targetScore = levelLoader.levelData.targetScore;
         TargetScoreTxt.text = "Target Score: " + targetScore;
-
     }
 
     public void NextGame()

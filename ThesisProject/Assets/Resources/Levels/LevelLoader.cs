@@ -3,27 +3,24 @@ using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class LevelLoader : MonoBehaviour
+public class LevelLoader : BaseLevelLoader
 {
     [SerializeField] private GameObject PlayerTilePrefab;// oyunun basinda yarat
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public Transform gridParent;
     [SerializeField] private float cellSize = 110f;
-    [SerializeField] private RectTransform gridParentRectTransform;
+    [SerializeField] private RectTransform GridParentRectTransform;
     [SerializeField] private GameObject BombUItutorialPanel;
+    public string levelCount;
+    [SerializeField] private GameObject bombTile;
 
-    private int gridWidth;
-    private int gridHeight;
 
     public static LevelLoader Instance { get; private set; }
-
-    public LevelData levelData; // herkesin ulaşacağı verimiz
-    [HideInInspector] public GameObject player;
-    public GameObject[,] tileGrid;
-
-    public string levelCount;
-
-    [SerializeField] private GameObject BombTile;
+    protected override GameObject BombTile => bombTile;
+    protected override GameObject TilePrefab => tilePrefab;
+    public override Transform GridParent => GridParentRectTransform;
+    protected override float CellSize => cellSize;
+    public override RectTransform gridParentRectTransform => GridParentRectTransform;
 
     private void Awake()
     {
@@ -37,18 +34,11 @@ public class LevelLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LoadLevel(string levelName)
+    protected override void LoadLevel()
     {
-
-     
-        if (levelData.grid == null || levelData.gridHeight == null)
-        {
-            Debug.Log("level data eror");
-        }
 
         gridWidth = levelData.gridWidth;
         gridHeight = levelData.gridHeight;
-
         tileGrid = new GameObject[levelData.gridHeight, levelData.gridWidth];
 
 
@@ -85,37 +75,7 @@ public class LevelLoader : MonoBehaviour
         Debug.Log("Map created");
     }
 
-
-    private void isBlack(GameObject tile)
-    {
-        tile.GetComponent<Image>().color = Color.black;
-    }
-
-
-    private void Start()
-    {
-
-        LevelStarter();
-     
-    }
-
-
-    public void LevelStarter()
-    {
-        MakeLevelData();
-        levelCount = PlayerPrefs.GetString("levelCount", "0");
-
-        string level = "Level" + levelCount;
-        LoadLevel(level);
-        SceneOrder();
-        Debug.Log(level);
-        if (level == "Level10")
-        {
-            BombUItutorialPanel.transform.DOScale(new Vector3(1f, 1f, 1f), 1f);
-        }
-    }
-
-    private void SceneOrder()
+    protected override void SceneOrder()
     {
         gridParentRectTransform.anchoredPosition = new Vector3(-(gridWidth - 1) * cellSize * 0.5f, (gridHeight - 1) * cellSize * 0.5f, 0f);
 
@@ -128,27 +88,8 @@ public class LevelLoader : MonoBehaviour
 
     }
 
-
-    private void MakeLevelData()
+    protected override void SetTilePosition(GameObject tile, int x, int y)
     {
-        Debug.Log("Make data started");
-        levelData = new LevelData();
-        levelData.targetScore = Random.Range(45, 100);
-        levelData.gridWidth= Random.Range(4, 10);
-        levelData.gridHeight= Random.Range(4, 10);
-        levelData.startX = 0;
-        levelData.startY = 0;
-        levelData.totalTime = 60;
-        levelData.isBlind = Random.Range(0, 2) == 0;
-        //%50 change to blind mode
-        int tileCount = levelData.gridHeight * levelData.gridWidth;
-        levelData.grid = new int[tileCount];
-        for (int i = 0; i < tileCount; i++)
-        {
-            levelData.grid[i] = Random.Range(1, 15);
-        }
-        Debug.Log("Make data Finished");
-
+        throw new System.NotImplementedException();
     }
-
 }

@@ -2,30 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
-
-public abstract class BaseAbstractScoreManager : MonoBehaviour
+public abstract class BaseAbstractScoreManager : IDisposable
 {
-    protected LevelLoader levelLoader;
+    protected ILevelDataProvider levelLoader;
     protected int score;
     protected IEventBus _eventBus;
 
-    protected virtual void Start()
-    {
-        levelLoader = LevelLoader.Instance;
-    }
 
-    protected virtual void OnEnable()
+    public BaseAbstractScoreManager( ILevelDataProvider dataProvider)
     {
+        levelLoader = dataProvider;
         _eventBus = EventBus.Instance;
         _eventBus.Subscribe<ResetPlayerScoreEvent>(OnResetScore);
         PlayerMoveEvent.OnPlayerMove += setScore;
+        _eventBus.Subscribe<TargetDestEvent>(OnEventTargetDest);
     }
 
-    protected virtual void OnDisable()
+    private void OnEventTargetDest(TargetDestEvent obj)
     {
-        _eventBus.UnSubscribe<ResetPlayerScoreEvent>(OnResetScore);
-        PlayerMoveEvent.OnPlayerMove -= setScore;
+        int i = (int)(obj.target.x + -obj.target.z * levelLoader.levelData.gridWidth); // index of grid
+        int value = levelLoader.levelData.grid[i];
+        Debug.Log("value: " + value + " index: " + i);
+        score += value * AddSubUI.AddSubMode;
+        Debug.Log(score);
+        ScoreEvent.PlayerScoreChanged(score); // Yay!
 
     }
 
@@ -42,16 +44,19 @@ public abstract class BaseAbstractScoreManager : MonoBehaviour
         levelLoader.levelData.grid[index] = 0;
         score += value * AddSubUI.AddSubMode;
 
-        //
-        TextMeshProUGUI playerText = levelLoader.player.GetComponentInChildren<TextMeshProUGUI>();
-        playerText.text = score.ToString();
-        //
         ScoreEvent.PlayerScoreChanged(score); // Yay!
+        Debug.Log(score);
     }
 
 
     public int GetScore()
     {
         return score;
+    }
+
+    public virtual void Dispose()
+    {
+        _eventBus.UnSubscribe<ResetPlayerScoreEvent>(OnResetScore);
+        PlayerMoveEvent.OnPlayerMove -= setScore;
     }
 }
