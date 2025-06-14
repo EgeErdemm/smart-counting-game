@@ -9,12 +9,12 @@ This structure not only provides basic arithmetic practice but also aims to supp
 
 ## 🎮 Game Mechanics
 
--The game board consists of a grid filled with randomly generated numbers.
--The player navigates the grid by swiping in four directions.
--The numbers in the cells visited by the player are added to their score.
--The player can select either addition or subtraction mode via the UI on the screen.
--The goal is to reach the target score within a limited number of moves.
--The player wins by following the correct path and reaching the target score before time runs out.
+- The game board consists of a grid filled with randomly generated numbers.
+- The player navigates the grid by swiping in four directions.
+- The numbers in the cells visited by the player are added to their score.
+- The player can select either addition or subtraction mode via the UI on the screen.
+- The goal is to reach the target score within a limited number of moves.
+- The player wins by following the correct path and reaching the target score before time runs out.
 
 ### 🎥 Game Play
 [![Game Play](https://img.youtube.com/vi/r17iroOqR-g/0.jpg)](https://www.youtube.com/watch?v=r17iroOqR-g)
@@ -26,9 +26,9 @@ The project is built in accordance with **OOP** principles and the **SOLID** sof
 
 ### SOLID Principles
 
-**Single Responsibility**: Each class has only one responsibility. (e.g., `ScoreManager` is solely responsible for score tracking.)
-**Open/Closed**: The code is open for extension but closed for modification. (e.g., different timer managers can be implemented by deriving from `AbstractTimerManager`.)
-**Interface Segregation & Dependency Inversion**: Behaviors are abstracted using interfaces such as `IGameWinCheck`, `INextLevelLoader`, and `ISeaAbleArea`. The `GameManager` operates based on these abstractions.
+- **Single Responsibility**: Each class has only one responsibility. (e.g., `ScoreManager` is solely responsible for score tracking.)
+- **Open/Closed**: The code is open for extension but closed for modification. (e.g., different timer managers can be implemented by deriving from `AbstractTimerManager`.)
+- **Interface Segregation & Dependency Inversion**: Behaviors are abstracted using interfaces such as `IGameWinCheck`, `INextLevelLoader`, and `ISeaAbleArea`. The `GameManager` operates based on these abstractions.
 
 
 ### 🧩 Event System and EventBus
